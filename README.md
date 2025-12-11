@@ -60,6 +60,11 @@ Migrations live in `src/database/migrations` and seeders in `src/database/seeder
 - Auth: Swagger is prepared for bearer auth; adjust according to your deployment needs.
 
 ## Database schema
-- Schema link: http....  
-- Schema image: placeholder image
+- Schema link: https://dbdiagram.io/d/693a90f8e877c630746ceacd
+- Schema images:
+  - Diagram: ![Diagram](documentation/diagram.png)
+  - Items: ![Items](documentation/items.png)
+  - Production: ![Production](documentation/production.png)
+  - Shipping: ![Shipping](documentation/shipping.png)
+  - Planning: ![Planning](documentation/planning.png)
 
