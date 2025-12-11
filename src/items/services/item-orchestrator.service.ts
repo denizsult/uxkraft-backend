@@ -44,8 +44,6 @@ export class ItemOrchestratorService {
     return this.itemModel.sequelize;
   }
 
- 
-
   async updatePlanning(
     itemId: number,
     updatePlanningDto: UpdatePlanningDto,
@@ -140,24 +138,27 @@ export class ItemOrchestratorService {
 
     try {
       /* this function is used to bulk insert or update data in the database */
-      const bulkUpsertPg = async (model, payload) => {
-        if (!payload || !Object.values(payload).some((value) => value  !== undefined))
-          return;
-
-        const rows = item_ids.map((id) => ({
-          item_id: id,
-          ...payload,
-        }));
-
+      const bulkUpsertPartial = async (model, payload) => {
+        if (!payload) return;
+      
+        // Yalnızca değeri tanımlı alanları al
+        const definedEntries = Object.entries(payload).filter(([, v]) => v !== undefined);
+        if (!definedEntries.length) return;
+      
+        const cleaned = Object.fromEntries(definedEntries);
+        const updateFields = Object.keys(cleaned);
+        const rows = item_ids.map(item_id => ({ item_id, ...cleaned }));
+      
         await model.bulkCreate(rows, {
-          updateOnDuplicate: Object.keys(payload),
-          transaction: transaction,
+          updateOnDuplicate: updateFields,
+          transaction,
         });
       };
+      
 
-      await bulkUpsertPg(this.itemPlanningModel, planning);
-      await bulkUpsertPg(this.itemProductionModel, production);
-      await bulkUpsertPg(this.itemShippingModel, shipping);
+      await bulkUpsertPartial(this.itemPlanningModel, planning);
+      await bulkUpsertPartial(this.itemProductionModel, production);
+      await bulkUpsertPartial(this.itemShippingModel, shipping);
 
       if (shipping?.delivered_date) {
         await this.itemModel.update(
