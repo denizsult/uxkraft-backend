@@ -48,6 +48,9 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy built application from build stage
 COPY --from=build --chown=nestjs:nodejs /app/dist ./dist
 
+COPY src/database/migrations ./dist/database/migrations
+COPY src/database/seeders ./dist/database/seeders
+
 # Switch to non-root user
 USER nestjs
 
