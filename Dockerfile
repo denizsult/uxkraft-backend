@@ -48,8 +48,10 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy built application from build stage
 COPY --from=build --chown=nestjs:nodejs /app/dist ./dist
 
+# Copy migrations, seeders, and cli-config for railway.app deployment
 COPY src/database/migrations ./dist/database/migrations
 COPY src/database/seeders ./dist/database/seeders
+COPY src/database/config/cli-config.js ./dist/database/config/cli-config.js
 
 # Switch to non-root user
 USER nestjs
