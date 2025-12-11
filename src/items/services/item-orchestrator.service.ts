@@ -101,7 +101,7 @@ export class ItemOrchestratorService {
       );
     }
 
-    const t = await this.getSequelize().transaction();
+    const transaction = await this.getSequelize().transaction();
 
     try {
       const updateData: any = {};
@@ -114,17 +114,17 @@ export class ItemOrchestratorService {
       /* bulk update items */
       const [affectedCount] = await this.itemModel.update(updateData, {
         where: { id: item_ids },
-        transaction: t,
+        transaction: transaction,
       });
 
-      await t.commit();
+      await transaction.commit();
 
       return {
         message: `Successfully updated ${affectedCount} item(s)`,
         successCount: affectedCount,
       };
     } catch (error) {
-      await t.rollback();
+      await transaction.rollback();
       throw error;
     }
   }
@@ -136,12 +136,12 @@ export class ItemOrchestratorService {
       throw new BadRequestException('item_ids is required');
     }
 
-    const t = await this.getSequelize().transaction();
+    const transaction = await this.getSequelize().transaction();
 
     try {
       /* this function is used to bulk insert or update data in the database */
       const bulkUpsertPg = async (model, payload) => {
-        if (!payload || !Object.values(payload).some((v) => v !== undefined))
+        if (!payload || !Object.values(payload).some((value) => value  !== undefined))
           return;
 
         const rows = item_ids.map((id) => ({
@@ -151,7 +151,7 @@ export class ItemOrchestratorService {
 
         await model.bulkCreate(rows, {
           updateOnDuplicate: Object.keys(payload),
-          transaction: t,
+          transaction: transaction,
         });
       };
 
@@ -162,18 +162,18 @@ export class ItemOrchestratorService {
       if (shipping?.delivered_date) {
         await this.itemModel.update(
           { phase: '4' },
-          { where: { id: item_ids }, transaction: t },
+          { where: { id: item_ids }, transaction: transaction },
         );
       }
 
-      await t.commit();
+      await transaction.commit();
 
       return {
         successCount: item_ids.length,
         message: `Updated ${item_ids.length} items`,
       };
     } catch (e) {
-      await t.rollback();
+      await transaction.rollback();
       throw e;
     }
   }
