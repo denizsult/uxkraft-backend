@@ -64,7 +64,7 @@ export class ItemsCoreService {
   }
 
   async exportToCsv(): Promise<string> {
-    const items = await this.findAll();
+    const items = await this.findAll()
 
     if (items.length === 0) {
       throw new BadRequestException('No items found');
@@ -82,7 +82,7 @@ export class ItemsCoreService {
         Quantity: plainItem.qty || 0,
         Phase: plainItem.phase || '',
         Price: plainItem.price || 0,
-        'Ship Notes': plainItem.item_notes || '',
+        'Ship Notes': plainItem.shipping?.shipping_notes || '',
         Location: plainItem.location || '',
         Category: plainItem.category || '',
         'Created At': plainItem.created_at 
