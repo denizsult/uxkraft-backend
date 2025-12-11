@@ -34,6 +34,6 @@ export class BulkUpdateItemsDto {
   @ApiPropertyOptional({ description: 'Notes', example: 'Notes' })
   @IsString()
   @IsOptional()
-  ship_notes?: string;
+  item_notes?: string;
 }
 

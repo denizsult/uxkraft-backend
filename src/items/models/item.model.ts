@@ -80,7 +80,7 @@ export class Item extends Model<Item> {
     type: DataType.TEXT,
     allowNull: true,
   })
-  ship_notes: string;
+  item_notes: string;
 
   @Index
   @Column({

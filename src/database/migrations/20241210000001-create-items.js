@@ -39,7 +39,7 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
       },
-      ship_notes: {
+      item_notes: {
         type: Sequelize.TEXT,
         allowNull: true,
       },

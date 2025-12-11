@@ -82,7 +82,7 @@ export class ItemsCoreService {
         Quantity: plainItem.qty || 0,
         Phase: plainItem.phase || '',
         Price: plainItem.price || 0,
-        'Ship Notes': plainItem.ship_notes || '',
+        'Ship Notes': plainItem.item_notes || '',
         Location: plainItem.location || '',
         Category: plainItem.category || '',
         'Created At': plainItem.created_at 

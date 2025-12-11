@@ -88,16 +88,16 @@ export class ItemOrchestratorService {
   async bulkUpdateItems(
     bulkUpdateItemsDto: BulkUpdateItemsDto,
   ): Promise<BulkOperationResult> {
-    const { item_ids, location, category, ship_from, ship_notes } =
+    const { item_ids, location, category, ship_from, item_notes } =
       bulkUpdateItemsDto;
 
     if (!item_ids?.length) {
       throw new BadRequestException('At least one item ID must be provided');
     }
 
-    if (!location && !category && !ship_from && !ship_notes) {
+    if (!location && !category && !ship_from && !item_notes) {
       throw new BadRequestException(
-        'At least one field (location, category, ship_from, or ship_notes) must be provided',
+        'At least one field (location, category, ship_from, or item_notes) must be provided',
       );
     }
 
@@ -109,7 +109,7 @@ export class ItemOrchestratorService {
       if (location !== undefined) updateData.location = location;
       if (category !== undefined) updateData.category = category;
       if (ship_from !== undefined) updateData.ship_from = ship_from;
-      if (ship_notes !== undefined) updateData.ship_notes = ship_notes;
+      if (item_notes !== undefined) updateData.item_notes = item_notes;
 
       /* bulk update items */
       const [affectedCount] = await this.itemModel.update(updateData, {
