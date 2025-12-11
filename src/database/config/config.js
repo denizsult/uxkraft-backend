@@ -22,7 +22,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    port: parseInt(process.env.DB_PORT, 10) || 5432,
     dialect: 'postgres',
     schema: 'public',
     logging: false,
@@ -31,6 +31,16 @@ module.exports = {
     },
     dialectOptions: {
       prependSearchPath: true,
+      ssl: process.env.DB_SSL !== 'false' ? {
+        require: true,
+        rejectUnauthorized: false,
+      } : false,
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
     },
   },
 };
